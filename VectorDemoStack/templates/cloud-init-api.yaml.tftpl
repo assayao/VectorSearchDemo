@@ -1,0 +1,45 @@
+#cloud-config
+package_update: true
+package_upgrade: false
+packages:
+  - curl
+  - git
+  - python3-venv
+  - python3-pip
+  - unzip
+
+write_files:
+  - path: /opt/ai-vector-demo/bootstrap.env
+    permissions: "0600"
+    content: |
+      API_REPO_URL=${api_repo_url}
+      API_REPO_REF=${api_repo_ref}
+      ORACLE_USER=${oracle_user}
+      ORACLE_PASSWORD=${oracle_password}
+      ORACLE_DSN=${oracle_dsn}
+      ORACLE_WALLET_PASSWORD=${oracle_wallet_password}
+      ORACLE_WALLET_ZIP_BASE64=${oracle_wallet_zip_base64}
+      EMBED_MODEL=${embed_model}
+      CHAT_MODEL=${chat_model}
+      CHUNK_SIZE=${chunk_size}
+      CHUNK_OVERLAP=${chunk_overlap}
+      APP_PORT=${app_port}
+      AUTO_INGEST_ON_BOOT=${auto_ingest_on_boot}
+      PDF_FILENAME=${pdf_filename}
+  - path: /opt/ai-vector-demo/README-next-steps.txt
+    permissions: "0644"
+    content: |
+      This VM bootstraps the vector demo directly from the Git repository.
+      Bootstrap log:
+        /var/log/vector-demo-bootstrap.log
+
+runcmd:
+  - mkdir -p /opt/ai-vector-demo
+  - curl -fsSL https://ollama.com/install.sh | sh
+  - systemctl enable ollama
+  - systemctl start ollama
+  - ollama pull ${embed_model}
+  - ollama pull ${chat_model}
+  - git clone ${api_repo_url} /opt/ai-vector-demo/app
+  - cd /opt/ai-vector-demo/app && git checkout ${api_repo_ref}
+  - bash /opt/ai-vector-demo/app/deploy/bootstrap_vm.sh > /var/log/vector-demo-bootstrap.log 2>&1

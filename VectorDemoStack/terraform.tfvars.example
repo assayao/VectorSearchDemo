@@ -1,0 +1,32 @@
+region           = "us-ashburn-1"
+tenancy_ocid     = "ocid1.tenancy.oc1..replace-me"
+compartment_ocid = "ocid1.compartment.oc1..replace-me"
+# Not used in OCI Resource Manager.
+# oci_config_profile = "DEFAULT"
+
+create_autonomous_database    = true
+autonomous_db_name            = "AIVECTORDB"
+autonomous_db_display_name    = "ai-vector-demo"
+autonomous_db_admin_password  = "ReplaceWithStrongPassword123!"
+autonomous_db_wallet_password = ""
+autonomous_db_version         = "26ai"
+autonomous_db_workload        = "OLTP"
+require_mtls_connections      = false
+# Leave empty in OCI Resource Manager. Use the sensitive wallet_zip_base64 output instead.
+wallet_output_path = ""
+oracle_user        = "admin"
+oracle_dsn         = ""
+oracle_wallet_zip_base64 = ""
+
+# Optional API/Ollama VM.
+enable_api_vm            = false
+ssh_public_key           = "ssh-rsa replace-me"
+ssh_cidr                 = "0.0.0.0/0"
+api_cidr                 = "0.0.0.0/0"
+api_repo_url             = "https://github.com/your-org/your-repo.git"
+api_repo_ref             = "main"
+app_port                 = 8000
+auto_ingest_on_boot      = true
+pdf_filename             = "move-oracle-cloud-using-zero-downtime-migration.pdf"
+create_reserved_public_ip = false
+api_public_ip_display_name = "ai-vector-api-public-ip"
